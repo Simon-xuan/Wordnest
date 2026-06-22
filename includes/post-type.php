@@ -71,7 +71,7 @@ add_action( 'init', 'wordnest_register_post_type' );
 function wordnest_migrate_post_type() {
     $current_db_version = get_option( 'wordnest_db_version', '1.1' );
 
-    if ( version_compare( $current_db_version, '1.2', '<' ) ) {
+    if ( version_compare( $current_db_version, '1.1.2', '<' ) ) {
         global $wpdb;
         $wpdb->update(
             $wpdb->posts,
@@ -81,7 +81,7 @@ function wordnest_migrate_post_type() {
             array( '%s' )
         );
 
-        update_option( 'wordnest_db_version', '1.2' );
+        update_option( 'wordnest_db_version', '1.1.2' );
         flush_rewrite_rules();
     }
 }

@@ -209,7 +209,7 @@ wordnest/
 
 ## 🛠 Changelog
 
-### v1.2.0
+### v1.1.2
 
 - Compliance: prefixed the custom post type (CPT) identifier with the plugin name (`glossary` → `wordnest`) to satisfy the WordPress.org review requirement that CPT/taxonomy identifiers be uniquely named and conflict-free
 - Migration: added a one-time, version-gated upgrade routine that renames existing `glossary` posts to `wordnest` in the database, so existing users keep all terms after upgrading; rewrite rules are flushed once after the rename
