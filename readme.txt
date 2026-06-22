@@ -4,7 +4,7 @@ Tags: glossary, tooltip, terms, dictionary, definitions
 Requires at least: 5.0
 Tested up to: 7.0
 Requires PHP: 8.0
-Stable tag: 1.1.1
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,10 @@ This usually means two copies of the plugin are installed (for example an old co
 4. Manage all glossary terms.
 
 == Changelog ==
+
+= 1.2.0 =
+* Compliance: prefixed the custom post type identifier with the plugin name (`glossary` → `wordnest`) to satisfy the WordPress.org review requirement that CPT/taxonomy identifiers be uniquely named and conflict-free.
+* Migration: added a one-time, version-gated upgrade routine that renames existing `glossary` posts to `wordnest` in the database, so current users keep all their terms after upgrading. Rewrite rules are flushed once after the rename.
 
 = 1.1.1 =
 * Compliance: added nonce verification to the post-redirect admin notice flags, and moved the CSV-import nonce check into the import handler's own scope — clears the WordPress.org Plugin Check NonceVerification warnings.

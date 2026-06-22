@@ -13,7 +13,7 @@ permissions:
   contents: write
 
 env:
-  DEFAULT_TAG: v1.1.1
+  DEFAULT_TAG: v1.2.0
 
 jobs:
   build:

@@ -220,7 +220,7 @@ function wordnest_admin_page() {
 
             <div class="tablenav top">
                 <div class="alignleft actions">
-                    <a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=glossary' ) ); ?>" class="button button-primary"><?php esc_html_e( '新增术语', 'wordnest' ); ?></a>
+                    <a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=wordnest' ) ); ?>" class="button button-primary"><?php esc_html_e( '新增术语', 'wordnest' ); ?></a>
                 </div>
                 <br class="clear">
             </div>
@@ -228,7 +228,7 @@ function wordnest_admin_page() {
             <?php
             // 获取所有词汇表术语
             $args = array(
-                'post_type'      => 'glossary',
+                'post_type'      => 'wordnest',
                 'post_status'    => 'publish',
                 'posts_per_page' => -1,
                 'orderby'        => 'title',
@@ -356,7 +356,7 @@ function wordnest_handle_csv_import() {
                 'ID'           => $existing_post->ID,
                 'post_title'   => $abbreviation,
                 'post_content' => $full_name,
-                'post_type'    => 'glossary',
+                'post_type'    => 'wordnest',
                 'post_status'  => 'publish',
             ) );
 
@@ -368,7 +368,7 @@ function wordnest_handle_csv_import() {
             $post_id = wp_insert_post( array(
                 'post_title'   => $abbreviation,
                 'post_content' => $full_name,
-                'post_type'    => 'glossary',
+                'post_type'    => 'wordnest',
                 'post_status'  => 'publish',
             ) );
 
@@ -419,7 +419,7 @@ function wordnest_truncate_chars( $str, $len ) {
  */
 function wordnest_get_existing_term( $title ) {
     $args = array(
-        'post_type'      => 'glossary',
+        'post_type'      => 'wordnest',
         'post_status'    => array( 'publish', 'pending', 'draft', 'future', 'private' ),
         'posts_per_page' => 1,
         'title'          => $title,

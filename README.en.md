@@ -209,6 +209,11 @@ wordnest/
 
 ## 🛠 Changelog
 
+### v1.2.0
+
+- Compliance: prefixed the custom post type (CPT) identifier with the plugin name (`glossary` → `wordnest`) to satisfy the WordPress.org review requirement that CPT/taxonomy identifiers be uniquely named and conflict-free
+- Migration: added a one-time, version-gated upgrade routine that renames existing `glossary` posts to `wordnest` in the database, so existing users keep all terms after upgrading; rewrite rules are flushed once after the rename
+
 ### v1.1.1
 
 - Compliance: added nonce verification to the post-redirect admin notice flags, and moved the CSV-import nonce check into the import handler's own scope — clears the WordPress.org Plugin Check NonceVerification warnings. No functional changes.

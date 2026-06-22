@@ -193,7 +193,7 @@ function wordnest_get_terms() {
     if ( false === $terms ) {
         // 查询数据库获取词汇表术语
         $args = array(
-            'post_type'      => 'glossary',
+            'post_type'      => 'wordnest',
             'posts_per_page' => -1,
             'post_status'    => 'publish',
             'fields'         => 'ids', // 仅获取文章 ID 以提高性能
@@ -241,7 +241,7 @@ function wordnest_get_terms() {
  * 当词汇表文章更新时清除缓存
  */
 function wordnest_clear_transient( $post_id ) {
-    if ( get_post_type( $post_id ) === 'glossary' ) {
+    if ( get_post_type( $post_id ) === 'wordnest' ) {
         delete_transient( 'wordnest_terms' );
     }
 }

@@ -209,6 +209,11 @@ wordnest/
 
 ## 🛠 版本历史
 
+### v1.2.0
+
+- 合规：自定义文章类型（CPT）标识符加上插件名前缀（`glossary` → `wordnest`），满足 WordPress.org 审核对 CPT/分类法标识符必须唯一、避免冲突的要求
+- 数据迁移：新增一次性、版本门控的升级例程，把数据库中已有的 `glossary` 文章改名为 `wordnest`，老用户升级后术语一个不丢；改名后刷新一次重写规则
+
 ### v1.1.1
 
 - 合规：后台提示标志（重定向后显示）补加 nonce 校验；CSV 导入的 nonce 校验移入导入函数自身作用域——消除 WordPress.org Plugin Check 的 NonceVerification 警告。无功能变化。

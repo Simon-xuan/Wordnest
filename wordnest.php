@@ -3,7 +3,7 @@
  * Plugin Name: Wordnest
  * Plugin URI: https://github.com/Simon-xuan/Wordnest
  * Description: 一个轻量级的 WordPress 词汇表插件，为内容中的术语添加工具提示。
- * Version: 1.1.1
+ * Version: 1.2.0
  * Requires at least: 5.0
  * Requires PHP: 8.0
  * Author: Simonxuan
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // 定义插件常量
-define( 'WORDNEST_VERSION', '1.1.1' );
+define( 'WORDNEST_VERSION', '1.2.0' );
 define( 'WORDNEST_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WORDNEST_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 

@@ -55,9 +55,34 @@ function wordnest_register_post_type() {
         'exclude_from_search'   => false,
         'publicly_queryable'    => true,
         'capability_type'       => 'post',
-        'rewrite'               => array( 'slug' => 'glossary' ),
+        'rewrite'               => array( 'slug' => 'wordnest' ),
     );
     
-    register_post_type( 'glossary', $args );
+    register_post_type( 'wordnest', $args );
 }
 add_action( 'init', 'wordnest_register_post_type' );
+
+/**
+ * 一次性数据迁移：把旧 CPT 标识符 glossary 重命名为 wordnest
+ *
+ * 用 wordnest_db_version 版本门控，只跑一次。直接更新 wp_posts.post_type，
+ * 老用户升级后术语不会丢失。改写规则在迁移后刷新一次。
+ */
+function wordnest_migrate_post_type() {
+    $current_db_version = get_option( 'wordnest_db_version', '1.1' );
+
+    if ( version_compare( $current_db_version, '1.2', '<' ) ) {
+        global $wpdb;
+        $wpdb->update(
+            $wpdb->posts,
+            array( 'post_type' => 'wordnest' ),
+            array( 'post_type' => 'glossary' ),
+            array( '%s' ),
+            array( '%s' )
+        );
+
+        update_option( 'wordnest_db_version', '1.2' );
+        flush_rewrite_rules();
+    }
+}
+add_action( 'admin_init', 'wordnest_migrate_post_type' );
