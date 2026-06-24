@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Wordnest
- * Plugin URI: https://github.com/Simon-xuan/Wordnest
+ * Plugin URI: https://wordpress.org/plugins/wordnest/
  * Description: 一个轻量级的 WordPress 词汇表插件，为内容中的术语添加工具提示。
  * Version: 1.1.2
  * Requires at least: 5.0
