@@ -1,5 +1,7 @@
 <div align="center">
 
+<img width="128" height="128" alt="Wordnest icon" src="docs/wordnest-icon-128x128.png">
+
 # 📖 Wordnest · 轻量级词汇表
 
 **为 WordPress 文章自动添加术语工具提示的极简插件**
