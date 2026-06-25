@@ -4,15 +4,15 @@
 
 **A minimalist WordPress plugin that adds term tooltips to your post content**
 
-Zero dependencies · First-class CJK support · Smart matching · High-performance caching
+Zero dependencies · Native Chinese support · English term matching · Smart matching
 
 [简体中文](README.md) · **English**
 
 <br>
 
-[![Version](https://img.shields.io/badge/version-1.1.0-2ea44f?style=for-the-badge)](https://github.com/Simon-xuan/Wordnest/releases)
+[![Version](https://img.shields.io/badge/version-1.1.2-2ea44f?style=for-the-badge)](https://github.com/Simon-xuan/Wordnest/releases)
 [![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-21759b?style=for-the-badge&logo=wordpress&logoColor=white)](https://wordpress.org/)
-[![PHP](https://img.shields.io/badge/PHP-7.0%2B-777bb4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
+[![PHP](https://img.shields.io/badge/PHP-8.0%2B-777bb4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
 [![License](https://img.shields.io/badge/License-GPL--2.0%2B-blue?style=for-the-badge)](http://www.gnu.org/licenses/gpl-2.0.txt)
 [![Dependencies](https://img.shields.io/badge/dependencies-none-success?style=for-the-badge)](#-why-wordnest)
 
@@ -47,7 +47,7 @@ Zero dependencies · First-class CJK support · Smart matching · High-performan
 | ⚡ **Native front-end** | Pure CSS + Vanilla JavaScript, zero dependencies (no jQuery), no extra libraries loaded |
 | 📥 **Bulk import** | Import large term lists at once from plain CSV text |
 | 🚀 **High performance** | Built-in Transient caching dramatically reduces database queries |
-| 🀄 **First-class English and Chinese support** | Regex matching and storage are optimized for Chinese and other multibyte text — no garbled output, no false matches |
+| 🀄 **Native Chinese support and English term matching** | Regex matching and storage are optimized for Chinese terms while remaining compatible with English terms |
 | 🔗 **Familiar structure** | Uses a data structure similar to CM Tooltip, so it *may* be compatible (untested — verify on your own) |
 
 ---
@@ -57,7 +57,7 @@ Zero dependencies · First-class CJK support · Smart matching · High-performan
 - **Light** — just a few PHP files plus one CSS/JS file. Install and go.
 - **Fast** — no third-party libraries on the front end, terms are cached, near-zero overhead.
 - **Safe** — parses content with `DOMDocument` and only touches plain text nodes, never breaking links or headings.
-- **Effortless** — native CJK support, CSV bulk import, everything managed in one place.
+- **Effortless** — native Chinese support, English term matching, CSV bulk import, everything managed in one place.
 
 ---
 
@@ -142,9 +142,9 @@ The tooltip styles live in `assets/css/tooltip.css`. Edit the bubble's backgroun
 ## ❓ FAQ
 
 <details>
-<summary><strong>Does it support Chinese / CJK terms?</strong></summary>
+<summary><strong>Does it support Chinese and English terms?</strong></summary>
 
-Yes, fully. Both the regex matching (`/u` modifier) and database storage are optimized for Chinese and other multibyte characters.
+Yes. Wordnest provides native Chinese support and remains compatible with English term matching.
 </details>
 
 <details>

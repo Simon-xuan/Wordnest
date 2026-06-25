@@ -6,15 +6,15 @@
 
 **为 WordPress 文章自动添加术语工具提示的极简插件**
 
-零依赖 · 原生中文 · 智能匹配 · 高性能缓存
+零依赖 · 原生中文支持 · 英文术语匹配 · 智能匹配
 
 **简体中文** · [English](README.en.md)
 
 <br>
 
-[![Version](https://img.shields.io/badge/version-1.1.0-2ea44f?style=for-the-badge)](https://github.com/Simon-xuan/Wordnest/releases)
+[![Version](https://img.shields.io/badge/version-1.1.2-2ea44f?style=for-the-badge)](https://github.com/Simon-xuan/Wordnest/releases)
 [![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-21759b?style=for-the-badge&logo=wordpress&logoColor=white)](https://wordpress.org/)
-[![PHP](https://img.shields.io/badge/PHP-7.0%2B-777bb4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
+[![PHP](https://img.shields.io/badge/PHP-8.0%2B-777bb4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
 [![License](https://img.shields.io/badge/License-GPL--2.0%2B-blue?style=for-the-badge)](http://www.gnu.org/licenses/gpl-2.0.txt)
 [![Dependencies](https://img.shields.io/badge/dependencies-none-success?style=for-the-badge)](#-为什么选择-wordnest)
 
@@ -49,7 +49,7 @@
 | ⚡ **极速原生前端** | 纯 CSS + 原生 JavaScript，零依赖（无 jQuery），不加载冗余库 |
 | 📥 **批量便捷导入** | 支持 CSV 文本格式一键导入大量术语 |
 | 🚀 **高性能架构** | 内置 Transient 缓存机制，大幅减少数据库查询 |
-| 🀄 **原生中文支持** | 正则匹配与数据存储均针对中文优化，无乱码、无误匹配 |
+| 🀄 **原生中文支持，兼容英文术语匹配** | 正则匹配与数据存储针对中文术语优化，同时兼容英文术语匹配 |
 | 🔗 **结构通用** | 采用与 CM Tooltip 类似的底层数据结构，理论上可能兼容（未经实测，请自行验证） |
 
 ---
@@ -59,7 +59,7 @@
 - **轻** — 整个插件仅几个 PHP 文件 + 一份 CSS/JS，安装即用。
 - **快** — 前端无任何第三方库，术语数据走缓存，几乎零额外开销。
 - **稳** — 基于 `DOMDocument` 解析正文，只处理纯文本节点，绝不污染链接与标题。
-- **省心** — 中文原生支持，CSV 批量导入，后台一处管理。
+- **省心** — 原生中文支持，兼容英文术语匹配，CSV 批量导入，后台一处管理。
 
 ---
 
@@ -145,9 +145,9 @@ TV｜Television,电视
 ## ❓ 常见问题 (FAQ)
 
 <details>
-<summary><strong>支持中文术语吗？</strong></summary>
+<summary><strong>支持中文和英文术语吗？</strong></summary>
 
-完美支持。插件在正则匹配（`/u` 修饰符）和数据库存储上均针对中文等多字节字符做了优化。
+支持。插件原生支持中文术语，并兼容英文术语匹配。
 </details>
 
 <details>
