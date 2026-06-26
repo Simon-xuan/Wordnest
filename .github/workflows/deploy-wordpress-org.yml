@@ -84,10 +84,12 @@ jobs:
             --exclude='.github' \
             --exclude='.gitignore' \
             --exclude='.DS_Store' \
+            --exclude='svn-wordnest' \
             --exclude='README.md' \
             --exclude='README.en.md' \
             --exclude='docs' \
             --exclude='build' \
+            --exclude='RELEASE_NOTES.md' \
             --exclude='*.zip' \
             --exclude='*.md' \
             ./ svn-wordnest/trunk/
