@@ -1,0 +1,126 @@
+name: Deploy to WordPress.org
+
+on:
+  push:
+    tags:
+      - 'v*'
+  release:
+    types:
+      - published
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release tag to deploy, for example v1.1.3'
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Resolve release ref
+        id: meta
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "push" ]; then
+            TAG="${GITHUB_REF_NAME}"
+          elif [ "${{ github.event_name }}" = "release" ]; then
+            TAG="${{ github.event.release.tag_name }}"
+          else
+            TAG="${{ inputs.version }}"
+          fi
+
+          case "$TAG" in
+            v[0-9]*.[0-9]*.[0-9]*)
+              ;;
+            *)
+              echo "Expected a semantic version tag like v1.1.3, got: $TAG" >&2
+              exit 1
+              ;;
+          esac
+
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout release source
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ steps.meta.outputs.tag }}
+
+      - name: Install SVN tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y subversion rsync
+
+      - name: Verify plugin metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.meta.outputs.version }}"
+          grep -q "Version: ${VERSION}" wordnest.php
+          grep -q "define( 'WORDNEST_VERSION', '${VERSION}' );" wordnest.php
+          grep -q "Stable tag: ${VERSION}" readme.txt
+          grep -q "register_post_type( 'wordnest'" includes/post-type.php
+          grep -q "'rewrite'               => array( 'slug' => 'wordnest' )" includes/post-type.php
+
+      - name: Prepare WordPress.org SVN working copy
+        shell: bash
+        run: |
+          set -euo pipefail
+          svn checkout https://plugins.svn.wordpress.org/wordnest/ svn-wordnest
+
+          find svn-wordnest/trunk -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+          mkdir -p "svn-wordnest/tags/${{ steps.meta.outputs.version }}"
+          find "svn-wordnest/tags/${{ steps.meta.outputs.version }}" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+
+          rsync -a \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='.gitignore' \
+            --exclude='.DS_Store' \
+            --exclude='README.md' \
+            --exclude='README.en.md' \
+            --exclude='docs' \
+            --exclude='build' \
+            --exclude='*.zip' \
+            --exclude='*.md' \
+            ./ svn-wordnest/trunk/
+
+          rsync -a svn-wordnest/trunk/ "svn-wordnest/tags/${{ steps.meta.outputs.version }}/"
+
+          svn status svn-wordnest | awk '$1 == "!" {print substr($0, 9)}' | while IFS= read -r path; do
+            svn delete "$path"
+          done
+
+          svn add --force svn-wordnest/trunk "svn-wordnest/tags/${{ steps.meta.outputs.version }}" --depth infinity
+          svn status svn-wordnest
+
+      - name: Commit to WordPress.org SVN
+        shell: bash
+        env:
+          WPORG_USERNAME: ${{ secrets.WPORG_USERNAME }}
+          WPORG_PASSWORD: ${{ secrets.WPORG_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [ -z "$WPORG_USERNAME" ] || [ -z "$WPORG_PASSWORD" ]; then
+            echo "WPORG_USERNAME and WPORG_PASSWORD repository secrets are required." >&2
+            exit 1
+          fi
+
+          if [ -z "$(svn status svn-wordnest)" ]; then
+            echo "No WordPress.org SVN changes to commit."
+            exit 0
+          fi
+
+          svn commit svn-wordnest \
+            --username "$WPORG_USERNAME" \
+            --password "$WPORG_PASSWORD" \
+            --no-auth-cache \
+            --non-interactive \
+            -m "Deploy Wordnest ${{ steps.meta.outputs.version }}"
