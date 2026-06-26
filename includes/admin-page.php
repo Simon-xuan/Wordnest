@@ -61,7 +61,7 @@ function wordnest_handle_admin_actions() {
             }
             $term_id = intval( $_GET['term_id'] );
             if ( $term_id > 0 && wp_delete_post( $term_id, true ) ) {
-                delete_transient( 'wordnest_terms' );
+                wordnest_clear_cache();
                 // 重定向回管理页面并显示成功消息
                 wp_safe_redirect( add_query_arg( array(
                     'page'           => 'wordnest',
@@ -100,7 +100,7 @@ function wordnest_handle_admin_actions() {
             }
 
             // 清除缓存
-            delete_transient( 'wordnest_terms' );
+            wordnest_clear_cache();
 
             // 4. 操作完成后重定向并添加反馈参数
             wp_safe_redirect( add_query_arg( array(
@@ -133,7 +133,7 @@ function wordnest_handle_admin_actions() {
             // 复选框未勾选时 $_POST 中不存在该字段，按"关闭"处理
             $first_only = ! empty( $_POST['wordnest_first_occurrence_only'] ) ? 1 : 0;
             update_option( 'wordnest_first_occurrence_only', $first_only );
-            delete_transient( 'wordnest_terms' );
+            wordnest_clear_cache();
         }
     }
 }
@@ -379,7 +379,7 @@ function wordnest_handle_csv_import() {
     }
 
     // 清除缓存
-    delete_transient( 'wordnest_terms' );
+    wordnest_clear_cache();
 
     // 显示通知
     if ( $imported > 0 || $updated > 0 ) {

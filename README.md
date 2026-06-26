@@ -12,7 +12,7 @@
 
 <br>
 
-[![Version](https://img.shields.io/badge/version-1.1.2-2ea44f?style=for-the-badge)](https://github.com/Simon-xuan/Wordnest/releases)
+[![Version](https://img.shields.io/badge/version-1.1.3-2ea44f?style=for-the-badge)](https://github.com/Simon-xuan/Wordnest/releases)
 [![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-21759b?style=for-the-badge&logo=wordpress&logoColor=white)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-8.0%2B-777bb4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
 [![License](https://img.shields.io/badge/License-GPL--2.0%2B-blue?style=for-the-badge)](http://www.gnu.org/licenses/gpl-2.0.txt)
@@ -28,11 +28,11 @@
 
 ---
 
-> **Wordnest** 是一款专为 WordPress 打造的极简术语工具提示插件。它用原生技术栈（纯 CSS + Vanilla JS）替代臃肿的同类插件，让你在文章中划过术语即可看到释义——快、轻、无依赖。前身是LiteGlossary。
+> **Wordnest** 是一款专为 WordPress 打造的极简术语工具提示插件。它用原生技术栈（纯 CSS + Vanilla JS）替代臃肿的同类插件，让你在文章中悬停、聚焦或触摸点击术语即可看到释义——快、轻、无依赖。前身是 LiteGlossary。
 
 <div align="center">
 
-<!-- 截图① 前端工具提示效果（划过术语弹出释义）-->
+<!-- 截图① 前端工具提示效果（悬停、聚焦或触摸点击术语弹出释义）-->
 <img width="720" alt="前端工具提示效果" src="docs/01-tooltip-demo.gif" />
 
 </div>
@@ -47,8 +47,9 @@
 | 🎯 **智能匹配算法** | 自动识别正文术语，智能避开已有超链接 `<a>` 与标题 `<h1>`–`<h6>`，不破坏布局 |
 | 🥇 **首词高亮模式** | 可全局设置仅高亮文内首次出现的术语，保持页面整洁 |
 | ⚡ **极速原生前端** | 纯 CSS + 原生 JavaScript，零依赖（无 jQuery），不加载冗余库 |
+| ♿ **可访问工具提示** | 支持悬停、键盘聚焦、触摸点击、外部点击关闭与 Esc 关闭 |
 | 📥 **批量便捷导入** | 支持 CSV 文本格式一键导入大量术语 |
-| 🚀 **高性能架构** | 内置 Transient 缓存机制，大幅减少数据库查询 |
+| 🚀 **高性能架构** | 内置 Transient 缓存机制，减少数据库查询与重复正文解析 |
 | 🀄 **原生中文支持，兼容英文术语匹配** | 正则匹配与数据存储针对中文术语优化，同时兼容英文术语匹配 |
 | 🔗 **结构通用** | 采用与 CM Tooltip 类似的底层数据结构，理论上可能兼容（未经实测，请自行验证） |
 
@@ -57,7 +58,7 @@
 ## 🤔 为什么选择 Wordnest
 
 - **轻** — 整个插件仅几个 PHP 文件 + 一份 CSS/JS，安装即用。
-- **快** — 前端无任何第三方库，术语数据走缓存，几乎零额外开销。
+- **快** — 前端无任何第三方库，术语数据和处理后正文都走缓存。
 - **稳** — 基于 `DOMDocument` 解析正文，只处理纯文本节点，绝不污染链接与标题。
 - **省心** — 原生中文支持，兼容英文术语匹配，CSV 批量导入，后台一处管理。
 
@@ -203,7 +204,7 @@ wordnest/
 │   └── admin-page.php         # 后台设置 / 导入 / 术语管理页面
 ├── assets/
 │   ├── css/tooltip.css        # 工具提示样式
-│   └── js/tooltip.js          # 原生 JS 悬停逻辑
+│   └── js/tooltip.js          # 原生 JS 工具提示交互
 ├── languages/                 # 多语言翻译（.pot 模板 + en_US 翻译）
 └── .github/workflows/         # 手动打包发布工作流
 ```
@@ -211,6 +212,13 @@ wordnest/
 ---
 
 ## 🛠 版本历史
+
+### v1.1.3
+
+- 可访问性：工具提示现在支持悬停、键盘聚焦、触摸点击、外部点击关闭、失焦关闭与 Esc 关闭
+- 可访问性：新增 ARIA 状态、tooltip role 与清晰的键盘焦点样式
+- 性能：新增按文章缓存处理后正文，避免每次页面加载都重复 DOM 解析和术语改写
+- 展示：为现有插件截图补充 WordPress.org 截图说明
 
 ### v1.1.2
 

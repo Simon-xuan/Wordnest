@@ -58,16 +58,54 @@ function adjustTooltipHeight(tooltip, content) {
 document.addEventListener('DOMContentLoaded', function() {
     // 获取所有词汇表术语
     var glossaryTerms = document.querySelectorAll('.wordnest-term');
+    var activeTerm = null;
+
+    function openTooltip(term, sticky) {
+        if (activeTerm && activeTerm !== term) {
+            closeTooltip(activeTerm);
+        }
+
+        term.classList.add('wordnest-tooltip-open');
+        term.setAttribute('aria-expanded', 'true');
+
+        if (sticky) {
+            term.setAttribute('data-wordnest-sticky', 'true');
+        }
+
+        activeTerm = term;
+    }
+
+    function closeTooltip(term) {
+        if (!term) {
+            return;
+        }
+
+        term.classList.remove('wordnest-tooltip-open');
+        term.setAttribute('aria-expanded', 'false');
+        term.removeAttribute('data-wordnest-sticky');
+
+        if (activeTerm === term) {
+            activeTerm = null;
+        }
+    }
     
     // 处理每个术语
-    glossaryTerms.forEach(function(term) {
+    glossaryTerms.forEach(function(term, index) {
         // 从数据属性获取工具提示内容
         var tooltipContent = term.getAttribute('data-tooltip');
         
         if (tooltipContent) {
+            var tooltipId = 'wordnest-tooltip-' + index;
+
+            term.setAttribute('tabindex', '0');
+            term.setAttribute('aria-describedby', tooltipId);
+            term.setAttribute('aria-expanded', 'false');
+
             // 创建工具提示元素
             var tooltip = document.createElement('span');
             tooltip.className = 'wordnest-tooltip';
+            tooltip.id = tooltipId;
+            tooltip.setAttribute('role', 'tooltip');
             
             // 用文本节点 + <br> 元素构建内容，避免 innerHTML 带来的 XSS 风险
             var lines = formatTextLines(tooltipContent);
@@ -83,6 +121,53 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // 动态调整工具提示高度
             adjustTooltipHeight(tooltip, tooltipContent);
+
+            term.addEventListener('mouseenter', function () {
+                openTooltip(term, false);
+            });
+
+            term.addEventListener('mouseleave', function () {
+                if (term.getAttribute('data-wordnest-sticky') !== 'true') {
+                    closeTooltip(term);
+                }
+            });
+
+            term.addEventListener('focus', function () {
+                openTooltip(term, false);
+            });
+
+            term.addEventListener('blur', function () {
+                closeTooltip(term);
+            });
+
+            term.addEventListener('click', function (event) {
+                event.stopPropagation();
+
+                if (term.classList.contains('wordnest-tooltip-open') && term.getAttribute('data-wordnest-sticky') === 'true') {
+                    closeTooltip(term);
+                    return;
+                }
+
+                openTooltip(term, true);
+            });
+
+            term.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape') {
+                    closeTooltip(term);
+                    term.blur();
+                } else if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    if (term.classList.contains('wordnest-tooltip-open') && term.getAttribute('data-wordnest-sticky') === 'true') {
+                        closeTooltip(term);
+                    } else {
+                        openTooltip(term, true);
+                    }
+                }
+            });
         }
+    });
+
+    document.addEventListener('click', function () {
+        closeTooltip(activeTerm);
     });
 });

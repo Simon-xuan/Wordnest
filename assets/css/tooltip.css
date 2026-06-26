@@ -11,6 +11,16 @@
     text-decoration: none;
 }
 
+.wordnest-term:focus {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+.wordnest-term:focus-visible {
+    outline: 2px solid #0066cc;
+    outline-offset: 2px;
+}
+
 .wordnest-tooltip {
     position: absolute;
     bottom: 100%;
@@ -44,7 +54,8 @@
     border-color: #333 transparent transparent transparent;
 }
 
-.wordnest-term:hover .wordnest-tooltip {
+.wordnest-term:hover .wordnest-tooltip,
+.wordnest-term.wordnest-tooltip-open .wordnest-tooltip {
     opacity: 1;
     visibility: visible;
 }

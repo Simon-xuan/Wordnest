@@ -10,7 +10,7 @@ Zero dependencies · Native Chinese support · English term matching · Smart ma
 
 <br>
 
-[![Version](https://img.shields.io/badge/version-1.1.2-2ea44f?style=for-the-badge)](https://github.com/Simon-xuan/Wordnest/releases)
+[![Version](https://img.shields.io/badge/version-1.1.3-2ea44f?style=for-the-badge)](https://github.com/Simon-xuan/Wordnest/releases)
 [![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-21759b?style=for-the-badge&logo=wordpress&logoColor=white)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-8.0%2B-777bb4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
 [![License](https://img.shields.io/badge/License-GPL--2.0%2B-blue?style=for-the-badge)](http://www.gnu.org/licenses/gpl-2.0.txt)
@@ -26,11 +26,11 @@ Zero dependencies · Native Chinese support · English term matching · Smart ma
 
 ---
 
-> **Wordnest** is a minimalist tooltip plugin built for WordPress. Using a native stack (pure CSS + Vanilla JS) instead of bloated alternatives, it lets readers hover over a term in your content and instantly see its definition — fast, lightweight, dependency-free.Formerly known as Lite-Glossary.
+> **Wordnest** is a minimalist tooltip plugin built for WordPress. Using a native stack (pure CSS + Vanilla JS) instead of bloated alternatives, it lets readers hover, focus, or tap a term in your content and instantly see its definition — fast, lightweight, dependency-free. Formerly known as Lite-Glossary.
 
 <div align="center">
 
-<!-- Screenshot 1: front-end tooltip (hover a term to reveal its definition) -->
+<!-- Screenshot 1: front-end tooltip (hover, focus, or tap a term to reveal its definition) -->
 <img width="720" alt="Front-end tooltip demo" src="docs/01-tooltip-demo.gif" />
 
 </div>
@@ -45,8 +45,9 @@ Zero dependencies · Native Chinese support · English term matching · Smart ma
 | 🎯 **Smart matching** | Automatically detects terms in content while skipping existing links `<a>` and headings `<h1>`–`<h6>`, so layout stays intact |
 | 🥇 **First-occurrence mode** | Optionally highlight only the first occurrence of each term per post, keeping pages clean |
 | ⚡ **Native front-end** | Pure CSS + Vanilla JavaScript, zero dependencies (no jQuery), no extra libraries loaded |
+| ♿ **Accessible tooltips** | Tooltips work with hover, keyboard focus, tap/click, outside click dismissal, and Esc dismissal |
 | 📥 **Bulk import** | Import large term lists at once from plain CSV text |
-| 🚀 **High performance** | Built-in Transient caching dramatically reduces database queries |
+| 🚀 **High performance** | Built-in Transient caching reduces database queries and repeated content parsing |
 | 🀄 **Native Chinese support and English term matching** | Regex matching and storage are optimized for Chinese terms while remaining compatible with English terms |
 | 🔗 **Familiar structure** | Uses a data structure similar to CM Tooltip, so it *may* be compatible (untested — verify on your own) |
 
@@ -55,7 +56,7 @@ Zero dependencies · Native Chinese support · English term matching · Smart ma
 ## 🤔 Why Wordnest
 
 - **Light** — just a few PHP files plus one CSS/JS file. Install and go.
-- **Fast** — no third-party libraries on the front end, terms are cached, near-zero overhead.
+- **Fast** — no third-party libraries on the front end, terms and processed post output are cached.
 - **Safe** — parses content with `DOMDocument` and only touches plain text nodes, never breaking links or headings.
 - **Effortless** — native Chinese support, English term matching, CSV bulk import, everything managed in one place.
 
@@ -200,7 +201,7 @@ wordnest/
 │   └── admin-page.php         # Admin settings / import / term management
 ├── assets/
 │   ├── css/tooltip.css        # Tooltip styles
-│   └── js/tooltip.js          # Vanilla JS hover logic
+│   └── js/tooltip.js          # Vanilla JS tooltip behavior
 ├── languages/                 # Translations (.pot template + en_US)
 └── .github/workflows/         # Manual build & release workflow
 ```
@@ -208,6 +209,13 @@ wordnest/
 ---
 
 ## 🛠 Changelog
+
+### v1.1.3
+
+- Accessibility: tooltips now support hover, keyboard focus, tap/click, outside click dismissal, blur dismissal, and Esc dismissal
+- Accessibility: added ARIA state, tooltip roles, and visible keyboard focus styling
+- Performance: added per-post processed content caching so DOM parsing and term rewriting are not repeated on every page load
+- Listing: added WordPress.org screenshot descriptions for the existing plugin screenshots
 
 ### v1.1.2
 

@@ -47,12 +47,69 @@ function wordnest_char_len( $str ) {
 }
 
 /**
+ * 获取缓存版本号。术语或设置变化时刷新该值，使已处理正文缓存失效。
+ */
+function wordnest_get_cache_version() {
+    return (string) get_option( 'wordnest_cache_version', '1' );
+}
+
+/**
+ * 清除术语缓存，并刷新已处理正文缓存版本。
+ */
+function wordnest_clear_cache() {
+    delete_transient( 'wordnest_terms' );
+    update_option( 'wordnest_cache_version', (string) microtime( true ), false );
+}
+
+/**
+ * 判断当前正文是否适合缓存处理后的输出。
+ */
+function wordnest_can_cache_content( $post_id ) {
+    return $post_id > 0 && ! is_preview();
+}
+
+/**
+ * 生成按文章和正文内容区分的处理后正文缓存 key。
+ */
+function wordnest_get_content_cache_key( $post_id, $content, $first_occurrence_only ) {
+    $cache_fingerprint = implode(
+        '|',
+        array(
+            absint( $post_id ),
+            WORDNEST_VERSION,
+            wordnest_get_cache_version(),
+            (int) $first_occurrence_only,
+            md5( $content ),
+        )
+    );
+
+    return 'wordnest_content_' . absint( $post_id ) . '_' . md5( $cache_fingerprint );
+}
+
+/**
  * 过滤内容，为词汇表术语添加工具提示
  */
 function wordnest_filter_content( $content ) {
     // 仅在单个文章/页面过滤
     if ( ! is_singular() ) {
         return $content;
+    }
+    // 获取插件设置
+    $first_occurrence_only = get_option( 'wordnest_first_occurrence_only', false );
+
+    $post_id = get_the_ID();
+    if ( ! $post_id ) {
+        $post_id = get_queried_object_id();
+    }
+
+    $content_cache_key = '';
+    if ( wordnest_can_cache_content( (int) $post_id ) ) {
+        $content_cache_key = wordnest_get_content_cache_key( (int) $post_id, $content, $first_occurrence_only );
+        $cached_content    = get_transient( $content_cache_key );
+
+        if ( false !== $cached_content ) {
+            return $cached_content;
+        }
     }
     
     // 获取词汇表术语（带缓存）
@@ -61,9 +118,6 @@ function wordnest_filter_content( $content ) {
     if ( empty( $terms ) ) {
         return $content;
     }
-    
-    // 获取插件设置
-    $first_occurrence_only = get_option( 'wordnest_first_occurrence_only', false );
     
     // 跟踪已找到的术语（仅首次出现选项）
     $found_terms = array();
@@ -136,7 +190,7 @@ function wordnest_filter_content( $content ) {
                 $new_nodes[] = $dom->createTextNode( substr( $text, $last, $offset - $last ) );
             }
 
-            // 术语高亮 span：仅悬停显示释义气泡，点击不跳转
+            // 术语高亮 span：前端脚本负责 hover、focus、tap/click 等显示方式。
             $span = $dom->createElement( 'span' );
             $span->setAttribute( 'class', 'wordnest-term' );
             $span->setAttribute( 'data-tooltip', wp_strip_all_tags( $term_map[ $matched ] ) );
@@ -178,7 +232,10 @@ function wordnest_filter_content( $content ) {
             $modified_content .= $dom->saveHTML( $child );
         }
     }
-    
+    if ( $content_cache_key ) {
+        set_transient( $content_cache_key, $modified_content, HOUR_IN_SECONDS );
+    }
+
     return $modified_content;
 }
 add_filter( 'the_content', 'wordnest_filter_content' );
@@ -240,13 +297,13 @@ function wordnest_get_terms() {
 /**
  * 当词汇表文章更新时清除缓存
  */
-function wordnest_clear_transient( $post_id ) {
+function wordnest_clear_cache_on_term_change( $post_id ) {
     if ( get_post_type( $post_id ) === 'wordnest' ) {
-        delete_transient( 'wordnest_terms' );
+        wordnest_clear_cache();
     }
 }
-add_action( 'save_post', 'wordnest_clear_transient' );
-add_action( 'delete_post', 'wordnest_clear_transient' );
+add_action( 'save_post', 'wordnest_clear_cache_on_term_change' );
+add_action( 'delete_post', 'wordnest_clear_cache_on_term_change' );
 
 /**
  * 递归获取所有文本节点，排除不应改写的区域
